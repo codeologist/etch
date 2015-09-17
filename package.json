@@ -1,0 +1,25 @@
+{
+  "name": "etch",
+  "version": "0.0.1",
+  "description": "Luna SDK",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin":{
+    "etch":"bin/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codeologist/etch.git"
+  },
+  "keywords": [
+    "luna"
+  ],
+  "author": "tony.gurnick@gmail.com",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/codeologist/etch/issues"
+  },
+  "homepage": "https://github.com/codeologist/etch#readme"
+}
