@@ -3,11 +3,17 @@
   "version": "0.0.1",
   "description": "Luna SDK",
   "main": "index.js",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-mocha": "^0.4.12",
+    "grunt-mocha-test": "^0.12.7",
+    "mocha": "^2.2.5"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "bin":{
-    "etch":"bin/cli.js"
+  "bin": {
+    "etch": "bin/cli.js"
   },
   "repository": {
     "type": "git",
