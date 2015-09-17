@@ -1,2 +1,7 @@
 #!/usr/bin/env node
-console.log( process.argv.slice(2));
+
+    var args = process.argv.slice(2);
+
+    if ( args[0] === "compile"){
+        console.log("compile");
+    }

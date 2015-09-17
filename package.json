@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin":{
-    "etch":"/bin/cli.js"
+    "etch":"bin/cli.js"
   },
   "repository": {
     "type": "git",
