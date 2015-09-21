@@ -1,7 +1,7 @@
     "use strict";
 
-    var Compile = require("../../src/Compile");
-    var loader = require("../../src/Loader");
+    var Compile = require("../../../src/lib/Compile/Index");
+    var loader = require("../../../src/lib/Loader/index");
 
     Compile( "./index.html" );
 

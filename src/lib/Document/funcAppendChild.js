@@ -12,6 +12,7 @@
 
         el.parent = this;
         el.documentElement = this.documentElement;
+        el.documentElement.dispatchEvent(  el.documentElement.createEvent("systemevent1") );
 
         return true;
     }
