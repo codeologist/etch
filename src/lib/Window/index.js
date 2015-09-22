@@ -1,16 +1,18 @@
 
     "use strict";
 
-    var DCINDEX = Symbol();
-    var DOCUMENT = Symbol();
-    var STRATEGY = Symbol();
+    var funcJsonToDocument = require("./funcJsonToDocument");
 
-    var setRootDC, DrawingContext;
+
+    var DOCUMENT = Symbol();
+    var RENDERSTRATEGY = Symbol();
+    var GESTURESTRATEGY = Symbol();
+
     try {
         var Luna = require("luna");
         var geometry = Luna.Application.getDisplayProperties();
-        setRootDC = Luna.Application.setRootDrawingContext;
-        DrawingContext =  Luna.Gfx.DrawingContext();
+
+
 
     } catch(e) {
         console.log("Luna not found.  Using default config");
@@ -18,24 +20,11 @@
             width: 1920,
             height: 1080
         };
-
-        setRootDC = function(){};
-        DrawingContext = function(){};
     }
 
 
 
-    function EmptyStrategy(){
 
-    }
-
-    EmptyStrategy.prototype.draw = function(){
-        return DrawingContext();
-    };
-
-
-    var Document = require("../Document");
-    var StringUtil = require("../utils/StringUtil");
 
 
     /**
@@ -43,15 +32,11 @@
      * @param document
      * @constructor
      */
-    function Window( document, strategy ) {
-        this[DCINDEX] = new WeakMap();
+    function Window( document ) {
+
         this[DOCUMENT] = new WeakMap();
-        this[STRATEGY] = new WeakMap();
-
-
-        this.window = this;
-        this.width = geometry.width;
-        this.height = geometry.height;
+        this[RENDERSTRATEGY] = new WeakMap();
+        this[GESTURESTRATEGY] = new WeakMap();
 
         Object.defineProperty( this, "document",{
             enumerable:true,
@@ -63,26 +48,34 @@
             }
         });
 
-        Object.defineProperty( this, "strategy",{
+        Object.defineProperty( this, "gestureStrategy",{
             enumerable:true,
             get: function(){
-                return this[STRATEGY].get( this );
+                return this[GESTURESTRATEGY].get( this );
             },
-            set: function( strategy ){
-                this[STRATEGY].set( this, strategy);
+            set: function( gestureStrategy ){
+                this[GESTURESTRATEGY].set( this, gestureStrategy);
             }
         });
-        /**
-         * Set the root luna dc
-         */
-        Object.defineProperty( this, "setRootDrawingContext", {
-            enumerable: false,
-            value: setRootDC
+
+        Object.defineProperty( this, "renderStrategy",{
+            enumerable:true,
+            get: function(){
+                return this[RENDERSTRATEGY].get( this );
+            },
+            set: function( renderStrategy ){
+                this[RENDERSTRATEGY].set( this, renderStrategy);
+
+                renderStrategy.getComputedStyle = this.getComputedStyle;
+                renderStrategy.draw( this.document );
+            }
         });
 
+
         this.document = document;
-        this.strategy = strategy || new EmptyStrategy();
-        this.setRootDrawingContext( this.strategy.draw() );
+
+        this.width = geometry.width;
+        this.height = geometry.height;
 
         if ( this.document ) {
             this.document.addEventListener( "onsystemevent1", function( e ){
@@ -93,66 +86,23 @@
     }
 
 
-    /**
-     * Always returns a drawing context for the element, one is created if it does not exists
-     * @param el
-     */
-    Window.prototype.getDrawingContext = function( el ){
-        if ( !this[DCINDEX].has( el ) ){
-            this[DCINDEX].set( el, new DrawingContext() );
-        }
-        return this[DCINDEX].get( el );
-    };
 
     Window.prototype.getComputedStyle = function( el ){
 
+
+
+        return {
+            display: "block",
+            left: 10,
+            top:10,
+            width:100,
+            height:100,
+            fontSize:16,
+            backgroundColor:"blue",
+            color:"red"
+        };
     };
 
-    Window.prototype.jsonToDocument = function( json ){
-
-
-        function recurse( child, parent ){
-
-            var element, ntype = child.nodeType;
-
-            if ( ntype  === 9 ){
-                element = new Document( child.tagName );
-                element.style = child.style;
-                element.id = child.id;
-            }
-
-            if (ntype === 1) {
-                element = parent.documentElement.createElement(child.tagName);
-                element.style = child.style;
-                element.id = child.id;
-            }
-
-            if (ntype === 3) {
-
-                element = parent.documentElement.createTextNode( new StringUtil( child.value ).normalizeText() );
-            }
-            if (ntype === 8) {
-                element = parent.documentElement.createCommentNode( new StringUtil( child.value ).normalizeText() );
-            }
-
-
-            if ( parent ){
-                parent.appendChild( element );
-            }
-
-            if ( child.childNodes ) {
-                child.childNodes.forEach(function (childNode) {
-                    recurse(childNode, element);
-                });
-            }
-
-            return element;
-        }
-
-        this.document = recurse( json );
-        this.document.window = this;
-
-        return this.document;
-    };
+    Window.prototype.jsonToDocument = funcJsonToDocument;
 
     module.exports = Window;

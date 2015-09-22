@@ -6,6 +6,8 @@ var Window = require("../../../src/lib/Window");
 
 describe('Window - Standard Behaviour', function(){
 
+
+
     it('should attatch a document to the window', function(done){
 
         var w = new Window();
@@ -17,26 +19,27 @@ describe('Window - Standard Behaviour', function(){
     });
 
 
-    it('should attatch a strategy to the window', function(done){
+    it('should attatch a render strategy to the window', function(done){
 
         var w = new Window();
 
-        w.strategy={"a":1};
+        w.renderStrategy={"a":1,draw:function(){}};
 
-        assert.equal( w.strategy.a, 1);
+        assert.equal( w.renderStrategy.a, 1);
         done();
     });
 
-    it('should create a new Luna drawing context', function(done){
+    it('should attatch a gesture strategy to the window', function(done){
 
         var w = new Window();
-        var el = { dummy:true };
 
-        var dc = w.getDrawingContext( el );
+        w.gestureStrategy={"a":1};
 
-        assert.equal( typeof dc, "object");// TODO - is this the best i can do?
+        assert.equal( w.gestureStrategy.a, 1);
         done();
     });
+
+
 
 
 });

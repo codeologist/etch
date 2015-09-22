@@ -1,13 +1,14 @@
     "use strict";
 
-    var Compile = require("../../../src/lib/Compile/Index");
-    var loader = require("../../../src/lib/Loader/index");
+    var Compile = require("../../src/lib/Compile/Index");
+    var loader = require("../../src/lib/Loader/index");
+    var RenderStrategy = require("etch-strategy");
 
     Compile( "./index.html" );
 
-    var window = loader("./index",{
-        strategy:function(){}
-    });
+    var window = loader("./a.cmp");
+    window.renderStrategy = new RenderStrategy( window );
+    window.gestureStrategy = new function(){};
 
     var document = window.document;
 
