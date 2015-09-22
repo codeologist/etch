@@ -11,7 +11,7 @@
             try {
                 Loader();
             } catch( e ){
-                assert.equal( e, "error loading document" );
+                assert.equal( e, "TypeError: Path must be a string. Received undefined" );
             }
 
             done();
@@ -22,7 +22,7 @@
             try {
                 Loader("./abc123");
             } catch( e ) {
-                assert.equal( e, "error loading document" );
+                assert.equal( e, "Error: ENOENT: no such file or directory, open '/Users/tony/CODEOLOGY/WIP/etch/abc123'" );
             }
 
             done();

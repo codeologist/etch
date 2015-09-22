@@ -16,7 +16,7 @@
             window.jsonToDocument( JSON.parse( fs.readFileSync(  filename ).toString() ) );
             return window;
         } catch ( e ){
-            throw "error loading document";
+            throw e;
         }
 
 

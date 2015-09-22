@@ -1,9 +1,19 @@
 
     "use strict";
 
+    var funcJsonToDocument = require("./funcJsonToDocument");
+
+
+    var DOCUMENT = Symbol();
+    var RENDERSTRATEGY = Symbol();
+    var GESTURESTRATEGY = Symbol();
+
     try {
         var Luna = require("luna");
         var geometry = Luna.Application.getDisplayProperties();
+
+
+
     } catch(e) {
         console.log("Luna not found.  Using default config");
         geometry = {
@@ -12,8 +22,9 @@
         };
     }
 
-    var Document = require("../Document");
-    var StringUtil = require("../utils/StringUtil");
+
+
+
 
 
     /**
@@ -21,65 +32,77 @@
      * @param document
      * @constructor
      */
-    function Window() {
-        this.window = this;
-        this.document = null;
+    function Window( document ) {
+
+        this[DOCUMENT] = new WeakMap();
+        this[RENDERSTRATEGY] = new WeakMap();
+        this[GESTURESTRATEGY] = new WeakMap();
+
+        Object.defineProperty( this, "document",{
+            enumerable:true,
+            get: function(){
+                return this[DOCUMENT].get( this );
+            },
+            set: function( document ){
+                this[DOCUMENT].set( this, document);
+            }
+        });
+
+        Object.defineProperty( this, "gestureStrategy",{
+            enumerable:true,
+            get: function(){
+                return this[GESTURESTRATEGY].get( this );
+            },
+            set: function( gestureStrategy ){
+                this[GESTURESTRATEGY].set( this, gestureStrategy);
+            }
+        });
+
+        Object.defineProperty( this, "renderStrategy",{
+            enumerable:true,
+            get: function(){
+                return this[RENDERSTRATEGY].get( this );
+            },
+            set: function( renderStrategy ){
+                this[RENDERSTRATEGY].set( this, renderStrategy);
+
+                renderStrategy.getComputedStyle = this.getComputedStyle;
+                renderStrategy.draw( this.document );
+            }
+        });
+
+
+        this.document = document;
 
         this.width = geometry.width;
         this.height = geometry.height;
 
+        if ( this.document ) {
+            this.document.addEventListener( "onsystemevent1", function( e ){
+                this.getDrawingContext( e.target );
+            }, true, Infinity, this );
+        }
+
     }
+
+
 
     Window.prototype.getComputedStyle = function( el ){
 
+
+
+        return {
+            display: "block",
+            left: 10,
+            top:10,
+            width:100,
+            height:100,
+            fontSize:16,
+            backgroundColor:"blue",
+            color:"red"
+        };
     };
 
+    Window.prototype.jsonToDocument = funcJsonToDocument;
 
-
-    Window.prototype.jsonToDocument = function( json ){
-
-
-        function recurse( child, parent ){
-
-            var element, ntype = child.nodeType;
-
-            if ( ntype  === 9 ){
-                element = new Document( child.tagName );
-                element.style = child.style;
-                element.id = child.id;
-            }
-
-            if (ntype === 1) {
-                element = parent.documentElement.createElement(child.tagName);
-                element.style = child.style;
-                element.id = child.id;
-            }
-
-            if (ntype === 3) {
-
-                element = parent.documentElement.createTextNode( new StringUtil( child.value ).normalizeText() );
-            }
-            if (ntype === 8) {
-                element = parent.documentElement.createCommentNode( new StringUtil( child.value ).normalizeText() );
-            }
-
-
-            if ( parent ){
-                parent.appendChild( element );
-            }
-
-            if ( child.childNodes ) {
-                child.childNodes.forEach(function (childNode) {
-                    recurse(childNode, element);
-                });
-            }
-
-            return element;
-        }
-
-        this.document = recurse( json );
-        this.document.window = this;
-
-        return this.document;
-    };
     module.exports = Window;
