@@ -2,11 +2,11 @@
 
     var Compile = require("../../src/lib/Compile/Index");
     var loader = require("../../src/lib/Loader/index");
-    var RenderStrategy = require("etch-strategy");
+    var RenderStrategy = require("etch-render-strategy");
 
     Compile( "./index.html" );
 
-    var window = loader("./a.cmp");
+    var window = loader("./a.cmp");//need a load ready
     window.renderStrategy = new RenderStrategy( window );
     window.gestureStrategy = new function(){};
 
