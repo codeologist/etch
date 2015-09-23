@@ -2,7 +2,7 @@
     "use strict";
 
     var funcJsonToDocument = require("./funcJsonToDocument");
-
+    var CssPropertySet = require("../CSS/CSSPropertySet");
     var DCINDEX = Symbol();
     var DOCUMENT = Symbol();
     var RENDERSTRATEGY = Symbol();
@@ -132,18 +132,19 @@
 
     Window.prototype.getComputedStyle = function( el ){
 
+        return new CssPropertySet( el.style );
 
 
-        return {
-            display: "block",
-            left: 10,
-            top:10,
-            width:100,
-            height:100,
-            fontSize:16,
-            backgroundColor:"blue",
-            color:"red"
-        };
+        //return {
+        //    display: "block",
+        //    left: 10,
+        //    top:10,
+        //    width:100,
+        //    height:100,
+        //    fontSize:16,
+        //    backgroundColor:"blue",
+        //    color:"red"
+        //};
     };
 
     Window.prototype.jsonToDocument = funcJsonToDocument;
