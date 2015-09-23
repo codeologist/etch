@@ -71,7 +71,7 @@
                 this[RENDERSTRATEGY].set( this, renderStrategy);
 
                 renderStrategy.getComputedStyle = this.getComputedStyle;
-                renderStrategy.draw( this.document );
+                renderStrategy.enqueue( this.document );
             }
         });
 
