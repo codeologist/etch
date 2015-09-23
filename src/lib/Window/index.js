@@ -7,6 +7,7 @@
     var DOCUMENT = Symbol();
     var RENDERSTRATEGY = Symbol();
     var GESTURESTRATEGY = Symbol();
+    var ANIMATIONSTRATEGY = Symbol();
 
     try {
         var Luna = require("luna");
@@ -37,6 +38,9 @@
         this[DOCUMENT] = new WeakMap();
         this[RENDERSTRATEGY] = new WeakMap();
         this[GESTURESTRATEGY] = new WeakMap();
+        this[ANIMATIONSTRATEGY] = new WeakMap();
+
+
 
         Object.defineProperty( this, "document",{
             enumerable:true,
@@ -68,6 +72,16 @@
 
                 renderStrategy.getComputedStyle = this.getComputedStyle;
                 renderStrategy.draw( this.document );
+            }
+        });
+
+        Object.defineProperty( this, "animationStrategy",{
+            enumerable:true,
+            get: function(){
+                return this[ANIMATIONSTRATEGY].get( this );
+            },
+            set: function( renderStrategy ){
+                this[ANIMATIONSTRATEGY].set( this, renderStrategy);
             }
         });
 
