@@ -26,7 +26,24 @@
             }
         });
 
-        this.documentElement = document
+
+        Object.defineProperty( this, "focus", {
+            value: function(){
+
+                this.dispatchEvent( this.documentElement.createEvent("focus") );
+            }
+        });
+
+        Object.defineProperty( this, "blur",{
+
+            value: function(){
+                this.dispatchEvent( this.documentElement.createEvent("blur") );
+            }
+        });
+
+
+        this.documentElement = document;
+
     }
 
 

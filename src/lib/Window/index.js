@@ -70,11 +70,15 @@
             set: function( renderStrategy ){
                 this[RENDERSTRATEGY].set( this, renderStrategy);
 
-                this.walkElementTree( this.document ).forEach( function( element ){
-                    renderStrategy.seed( element,  this.nodeToDrawingContext( element ), this.getComputedStyle( element ) );
-                }, this );
+                if ( this.document && renderStrategy.seed){
+                    this.walkElementTree( this.document ).forEach( function( element ){
+                        renderStrategy.seed( element,  this.nodeToDrawingContext( element ), this.getComputedStyle( element ) );
+                    }, this );
+                }
 
-                renderStrategy.enqueue( this.document );
+                if ( renderStrategy.enqueue ) {
+                    renderStrategy.enqueue(this.document);
+                }
             }
         });
 
