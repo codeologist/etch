@@ -42,3 +42,4 @@
         console.log("READY HANDLER 2");
     });
 
+    console.log("SHOULD APPEAR BEFORE READY EVENT HANDLERS.");
