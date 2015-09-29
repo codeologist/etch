@@ -1,6 +1,8 @@
 
 "use strict";
 
+
+
 var ObjectNode = require("./ObjectNode"),
     CreateElement = require("./funcCreateElement"),
     CreateEvent= require("./funcCreateEvent"),
@@ -12,6 +14,7 @@ var ObjectNode = require("./ObjectNode"),
     AspectObservable= require("../Aspects/AspectOnPropertyChangeObserver");
 
     function ObjectDocument( tag ){
+
 
         AspectElement.call( this, tag || "DOCUMENT", this );
         AspectDocument.call( this );
@@ -25,6 +28,7 @@ var ObjectNode = require("./ObjectNode"),
                 }
             }, this );
         }.bind( this ));
+
 
         this.allowOnPropertyChangeEvents = false;
         AspectObservable.call( this );
@@ -40,4 +44,8 @@ var ObjectNode = require("./ObjectNode"),
 
 
 
-    module.exports=ObjectDocument;
+
+
+
+
+module.exports=ObjectDocument;

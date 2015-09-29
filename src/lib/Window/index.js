@@ -2,11 +2,12 @@
     "use strict";
 
     var funcJsonToDocument = require("./funcJsonToDocument");
-
-
+    var CssPropertySet = require("../CSS/CSSPropertySet");
+    var DCINDEX = Symbol();
     var DOCUMENT = Symbol();
     var RENDERSTRATEGY = Symbol();
     var GESTURESTRATEGY = Symbol();
+    var ANIMATIONSTRATEGY = Symbol();
 
     try {
         var Luna = require("luna");
@@ -33,10 +34,13 @@
      * @constructor
      */
     function Window( document ) {
-
+        this[DCINDEX] = new WeakMap();
         this[DOCUMENT] = new WeakMap();
         this[RENDERSTRATEGY] = new WeakMap();
         this[GESTURESTRATEGY] = new WeakMap();
+        this[ANIMATIONSTRATEGY] = new WeakMap();
+
+
 
         Object.defineProperty( this, "document",{
             enumerable:true,
@@ -66,8 +70,25 @@
             set: function( renderStrategy ){
                 this[RENDERSTRATEGY].set( this, renderStrategy);
 
-                renderStrategy.getComputedStyle = this.getComputedStyle;
-                renderStrategy.draw( this.document );
+                if ( this.document && renderStrategy.seed){
+                    this.walkElementTree( this.document ).forEach( function( element ){
+                        renderStrategy.seed( element,  this.nodeToDrawingContext( element ), this.getComputedStyle( element ) );
+                    }, this );
+                }
+
+                if ( renderStrategy.enqueue ) {
+                    renderStrategy.enqueue(this.document);
+                }
+            }
+        });
+
+        Object.defineProperty( this, "animationStrategy",{
+            enumerable:true,
+            get: function(){
+                return this[ANIMATIONSTRATEGY].get( this );
+            },
+            set: function( renderStrategy ){
+                this[ANIMATIONSTRATEGY].set( this, renderStrategy);
             }
         });
 
@@ -77,30 +98,57 @@
         this.width = geometry.width;
         this.height = geometry.height;
 
-        if ( this.document ) {
-            this.document.addEventListener( "onsystemevent1", function( e ){
-                this.getDrawingContext( e.target );
-            }, true, Infinity, this );
-        }
+        //if ( this.document ) {
+        //    this.document.addEventListener( "onsystemevent1", function( e ){
+        //        this.getDrawingContext( e.target );
+        //    }, true, Infinity, this );
+        //}
 
     }
 
+    Window.prototype.walkElementTree = function( node ) {
+
+        var out = [ node ];
+
+        if ( node.childNodes ) {
+            node.childNodes.forEach( function ( child ) {
+                if ( child.nodeType === 9 || child.nodeType === 1 ) {
+                    out = out.concat ( this.walkElementTree( child ) );
+                }
+            }, this );
+        }
+
+        return out;
+    };
+    /**
+     * Always returns a drawing context for the element, one is created if it does not exists
+     * @param el
+     */
+    Window.prototype.nodeToDrawingContext = function( el ){
+
+        if ( !this[DCINDEX].has( el ) ){
+            this[DCINDEX].set( el, new  Luna.Gfx.DrawingContext() );
+        }
+
+        return this[DCINDEX].get( el );
+    };
 
 
     Window.prototype.getComputedStyle = function( el ){
 
+        return new CssPropertySet( el.style );
 
 
-        return {
-            display: "block",
-            left: 10,
-            top:10,
-            width:100,
-            height:100,
-            fontSize:16,
-            backgroundColor:"blue",
-            color:"red"
-        };
+        //return {
+        //    display: "block",
+        //    left: 10,
+        //    top:10,
+        //    width:100,
+        //    height:100,
+        //    fontSize:16,
+        //    backgroundColor:"blue",
+        //    color:"red"
+        //};
     };
 
     Window.prototype.jsonToDocument = funcJsonToDocument;
