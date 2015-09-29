@@ -1,13 +1,14 @@
-
     "use strict";
 
     var funcJsonToDocument = require("./funcJsonToDocument");
+
+    var ready = require("./funcReady");
     var CssPropertySet = require("../CSS/CSSPropertySet");
     var DCINDEX = Symbol();
     var DOCUMENT = Symbol();
     var RENDERSTRATEGY = Symbol();
     var GESTURESTRATEGY = Symbol();
-    var ANIMATIONSTRATEGY = Symbol();
+    var DOCUMENTREADY = Symbol();
 
     try {
         var Luna = require("luna");
@@ -25,7 +26,11 @@
 
 
 
-
+    function readyHandler( resolve, reject, changes ){
+        if ( changes[0].object.isDocumentReady === true ){
+            resolve( true );
+        }
+    }
 
 
     /**
@@ -38,7 +43,33 @@
         this[DOCUMENT] = new WeakMap();
         this[RENDERSTRATEGY] = new WeakMap();
         this[GESTURESTRATEGY] = new WeakMap();
-        this[ANIMATIONSTRATEGY] = new WeakMap();
+        this[DOCUMENTREADY] = false;
+
+
+        Object.defineProperty( this, "isDocumentReady",{
+            get:function(){
+                return this[DOCUMENTREADY];
+            },
+            set:function(){
+                if ( !this[DOCUMENTREADY] ){
+                    this[DOCUMENTREADY] = true;
+                    Object.unobserve( this, readyHandler.bind( this ));
+                }
+            }
+        });
+
+        Object.defineProperty( this, "documentReadyPromiseResolutionQueue",{
+            value: new Promise( function( resolve, reject ){
+                Object.observe( this, readyHandler.bind( this, resolve, reject ));
+            }.bind( this ))
+        });
+
+        Object.defineProperty( this, "queueReadyCallbackAwaitingPromiseResolution",{
+            value:function( func ){
+                this.documentReadyPromiseResolutionQueue.then( func );
+            }
+        });
+
 
 
 
@@ -150,6 +181,8 @@
         //    color:"red"
         //};
     };
+
+    Window.prototype.ready=  ready;
 
     Window.prototype.jsonToDocument = funcJsonToDocument;
 

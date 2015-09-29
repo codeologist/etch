@@ -1,10 +1,9 @@
-
     "use strict";
 
     var Document = require("../Document");
     var StringUtil = require("../utils/StringUtil");
 
-    function funcJsonToDocument( json ){
+    function funcJsonToDocument( json, callback ){
 
 
         function recurse( child, parent ){
@@ -47,6 +46,9 @@
 
         this.document = recurse( json );
         this.document.window = this;
+        if ( typeof callback === "function"){
+            callback();
+        }
 
         return this.document;
     }
