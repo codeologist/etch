@@ -75,7 +75,7 @@ describe('DispatchEvent', function(){
     });
 
 
-        it('should dispatch an event in both capture and bubble phases', function(done){
+    it('should dispatch an event in both capture and bubble phases', function(done){
 
 
 
@@ -95,10 +95,16 @@ describe('DispatchEvent', function(){
             eventHandlers: []
         };
 
-        AddEventListener.call( docEl, "onchange", handler1, true, 1, contextOfHandler );
-        AddEventListener.call( targetElement, type, handler1, true, 1, contextOfHandler );
+        /*
+        *       * * * WARNING * * *
+        *       THE EVENT BEING TESTED HERE IS "ONCHANGE" and not "ONCLICK"
+        *       so there is a trap for the unwary in the code below
+        *
+        */
+        AddEventListener.call( docEl,         "onchange", handler1, true, 1, contextOfHandler );
+        AddEventListener.call( targetElement, "onclick",  handler1, true, 1, contextOfHandler );
         AddEventListener.call( targetElement, "onchange", handler2, true, 1, contextOfHandler );
-        AddEventListener.call( targetElement, type, handler2, true, 1, contextOfHandler );
+        AddEventListener.call( targetElement, "onclick",  handler2, true, 1, contextOfHandler );
 
         assert.equal( docEl.eventHandlers.length, 1 );
         assert.equal( targetElement.eventHandlers.length, 3 );
@@ -106,16 +112,30 @@ describe('DispatchEvent', function(){
         // dispatch must loop thru all nodes and get all valid handlers, overide the event obj and bind to it
         // the context and type and dispatch them
         var event = { type:"onchange" };
+
+        /*
+        *   Before we dispatch the event make sure the document event queue empty.  Dispatch should instantiate the
+        *   events on the event queue and they will be automatically processed.
+        *
+        * */
+        assert.equal( docEl.eventQueue.length, 0 );
         var listOfElementsInvolvedInCurrentDispatch = DispatchEvent.call( targetElement, event );
 
-        // assert the number of elements involved in this dispatch
+        /*
+        *   Events should now have been instantiated on the event queue
+        *
+        */
+        assert.equal( docEl.eventQueue.length, 2 );
+
+        /*
+        *   Only 2 elements are involved in this event dispatch
+        */
         assert.equal( listOfElementsInvolvedInCurrentDispatch.length, 2  );
+
         assert.deepEqual( listOfElementsInvolvedInCurrentDispatch[0], docEl, "top of the document is always listed first" );
         assert.deepEqual( listOfElementsInvolvedInCurrentDispatch[1], targetElement );
 
-        // The number of handlers that have been queued to execute.
-        // for listeners that include the capture phase there should be 2 per registered element
-        assert.equal( docEl.eventQueue.length, 4 );
+
 
         var eventresult = docEl.eventQueue[0];
         assert( eventresult.context === contextOfHandler, "correct context should be applied to event handler" );
@@ -136,26 +156,10 @@ describe('DispatchEvent', function(){
         assert.equal( eventresult2.handler, handler2 );
         assert.equal( eventresult2.capture, true );
 
-        var eventresult3 = docEl.eventQueue[2];
-        assert( eventresult3.context === contextOfHandler, "correct context should be applied to event handler" );
-        assert.equal(  eventresult3.eventPhase, 3, "we should be in the bubble phase" );
 
-        assert.equal(  eventresult3.type, "onchange" );
-        assert.deepEqual(  eventresult3.event, event );
-        assert.equal( eventresult3.iterations, null, "set to null becuase it is redundant in this context" );
-        assert.equal( eventresult3.handler, handler2 );
-        assert.equal( eventresult3.capture, true );
-
-        var eventresult4 = docEl.eventQueue[3];
-        assert( eventresult4.context === contextOfHandler, "correct context should be applied to event handler" );
-        assert.equal(  eventresult4.eventPhase, 3, "we should be in the bubble phase" );
-
-        assert.equal(  eventresult4.type, "onchange" );
-        assert.deepEqual(  eventresult4.event, event );
-        assert.equal( eventresult4.iterations, null, "set to null becuase it is redundant in this context" );
-        assert.equal( eventresult4.handler, handler1 );
-        assert.equal( eventresult4.capture, true );
-
+        /*
+        *   ONCHANGE events have
+        */
         assert.equal( docEl.eventHandlers.length, 0, "event handlers queued"  );
         assert.equal( targetElement.eventHandlers.length, 2 );
 

@@ -40,7 +40,7 @@
         EtchAncestors(this).reverse().forEach( function( el ){
             var localEventHandlers = el.eventHandlers;
             localEventHandlers.filter( filterHandlers.bind( event ) ).forEach( function( eho ){
-                if ( eho.capture ){
+                if ( eho.capture === true ){
                     dispatchHandler( eho, event, this.documentElement, el,  el === this ? 2 : 1, this );
                 }
             }, this );
@@ -51,12 +51,16 @@
         EtchAncestors(this).forEach( function( el ){
             var localEventHandlers = el.eventHandlers;
             localEventHandlers.filter( filterHandlers.bind( event ) ).forEach( function( eho ){
-                dispatchHandler( eho, event, this.documentElement, el, 3, this );
+                if ( eho.capture !== true ) {
+                    dispatchHandler(eho, event, this.documentElement, el, el === this ? 2 : 3, this);
+                }
             }, this );
         }, this);
 
 
-        // decrease iterations on dispatched events
+        // Events can be dispatched a specified amount of time or and Infinite amount of times.
+        // each time an event is dispatched its counter is decreased, wether it is listened to or not.
+        // The counter is only decreased once no matter how many elements are involved in the dispatch
         EtchAncestors(this).forEach( function( el ){
             var localEventHandlers = el.eventHandlers;
             localEventHandlers.filter( filterHandlers.bind( event ) ).forEach( function( eho ){
