@@ -105,8 +105,8 @@
 
             var doc = WINDOW.jsonToDocument( revivableDoc );
 
-            assert.equal( doc.style, "top:10" );
-            assert.equal( doc.childNodes[0].style, "left:10" );
+            assert.equal( doc.style.top,"10" );
+            assert.equal( doc.childNodes[0].style.left,"10" );
 
 
             done();

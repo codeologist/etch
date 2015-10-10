@@ -12,9 +12,6 @@
 
         var el = new Element(tag);
 
-        el.nodeType = 1;
-        el.style="";
-
         return el;
 
 

@@ -14,7 +14,7 @@
      */
     function CSSPropertySet( propertySetString ){
 
-        if ( propertySetString ){
+        if ( typeof propertySetString === "string"){
             var properties = propertySetString.split(";");
 
             properties.forEach( function( kvpair ){

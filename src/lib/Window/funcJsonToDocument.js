@@ -2,6 +2,8 @@
 
     var Document = require("../Document");
     var StringUtil = require("../utils/StringUtil");
+    var CSSPropertySet = require("../CSS/CSSPropertySet");
+
 
     function funcJsonToDocument( json, callback ){
 
@@ -12,13 +14,13 @@
 
             if ( ntype  === 9 ){
                 element = new Document( child.tagName );
-                element.style = child.style;
+                element.style = new CSSPropertySet( child.style );
                 element.id = child.id;
             }
 
             if (ntype === 1) {
                 element = parent.documentElement.createElement(child.tagName);
-                element.style = child.style;
+                element.style = new CSSPropertySet( child.style );
                 element.id = child.id;
             }
 

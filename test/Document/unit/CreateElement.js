@@ -22,7 +22,7 @@
             assert.equal( CreateElement("div").tagName, "DIV" );
             assert.equal( CreateElement("blah").tagName, "BLAH" );
             assert.equal( CreateElement("blah").nodeType, 1 );
-            assert.equal( CreateElement("blah").style, "" );
+            assert.deepEqual( CreateElement("blah").style, {} );
 
 
 
