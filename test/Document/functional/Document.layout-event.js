@@ -61,7 +61,6 @@
 
                 window.document.addEventListener( "ondraw", function( e ){
                     ct++;
-                    console.log(":::::::",ct, e.eventPhase, e.target.tagName , e.target.style)
                 }, true );
 
                 window.document.childNodes[0].childNodes[0].childNodes[0].nongeometry="RANDOMTEXT";
