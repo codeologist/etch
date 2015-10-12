@@ -25,17 +25,20 @@
 
                 window.document.childNodes[0].style.top=86;
                 window.document.childNodes[0].childNodes[0].childNodes[0].nongeometry="RANDOMTEXT";
-                window.document.childNodes[0].childNodes[0].style.height=99;
-                window.document.childNodes[0].childNodes[0].childNodes[0].style.left=99;
-                window.document.childNodes[0].childNodes[0].childNodes[0].style.width=99;
-                window.document.childNodes[0].childNodes[0].childNodes[0].style.display="none";
+                window.document.childNodes[0].childNodes[0].style = {
+                    left: 27,
+                    height:99,
+                    width:99,
+                    display:"none"
+                };
+
 
                 window.document.appendChild(window.document.createElement("span"));
                 window.document.appendChild(window.document.createElement("p"));
             });
 
             setTimeout( function(){
-                assert.equal( ct, 7 );
+                assert.equal( ct, 4 );
                 window.document.removeEventListener("onlayout");
                 window.document.removeEventListener("ondraw");
                 done();
@@ -68,7 +71,7 @@
             });
 
             setTimeout( function(){
-                assert.equal( ct, 2 );
+                assert.equal( ct, 1 );
                 window.document.removeEventListener("onlayout");
                 window.document.removeEventListener("ondraw");
                 done();

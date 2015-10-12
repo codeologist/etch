@@ -81,14 +81,27 @@
         }.bind( this ));
 
         Object.observe( this.style, function(changes) {
+            var dispatchLayout=false;
+            var dispatchDraw=false;
+
             changes.forEach( function(change){
                 if ( LAYOUT.indexOf( change.name ) !== -1 && this.parent !== null ) {
-                    this.parent.dispatchEvent(  this.documentElement.createEvent("layout") );
+                    dispatchLayout = true;
                 } else {
-                    this.dispatchEvent(  this.documentElement.createEvent("draw") );
+                    dispatchDraw = true;
                 }
             }, this );
+
+            if ( dispatchLayout ) {
+                this.parent.dispatchEvent(  this.documentElement.createEvent("layout") );
+            }
+
+            if ( dispatchDraw) {
+                this.dispatchEvent(  this.documentElement.createEvent("draw") );
+            }
+
         }.bind( this ));
+
 
     }
 
