@@ -27,5 +27,8 @@
   "bugs": {
     "url": "https://github.com/codeologist/etch/issues"
   },
-  "homepage": "https://github.com/codeologist/etch#readme"
+  "homepage": "https://github.com/codeologist/etch#readme",
+  "dependencies": {
+    "etch-render-strategy": "^1.0.0"
+  }
 }
