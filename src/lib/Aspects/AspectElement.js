@@ -65,6 +65,21 @@
             }
         });
 
+        // LAYOUT CHANGE FOR APPEND AND REMOVE
+
+        Object.observe( this, function(changes) {
+            var dispatch = false;
+            changes.forEach( function(change){
+                if ( change.name === "parent" ) {
+                    dispatch = true;
+                }
+            }, this );
+
+            if ( dispatch ) {
+                this.parent.dispatchEvent(  this.documentElement.createEvent("layout") );
+            }
+        }.bind( this ));
+
         Object.observe( this.style, function(changes) {
             changes.forEach( function(change){
                 if ( LAYOUT.indexOf( change.name ) !== -1 && this.parent !== null ) {

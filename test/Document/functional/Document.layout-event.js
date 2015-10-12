@@ -29,10 +29,13 @@
                 window.document.childNodes[0].childNodes[0].childNodes[0].style.left=99;
                 window.document.childNodes[0].childNodes[0].childNodes[0].style.width=99;
                 window.document.childNodes[0].childNodes[0].childNodes[0].style.display="none";
+
+                window.document.appendChild(window.document.createElement("span"));
+                window.document.appendChild(window.document.createElement("p"));
             });
 
             setTimeout( function(){
-                assert.equal( ct, 5 );
+                assert.equal( ct, 7 );
                 window.document.removeEventListener("onlayout");
                 window.document.removeEventListener("ondraw");
                 done();
