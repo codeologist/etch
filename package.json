@@ -1,6 +1,6 @@
 {
-  "name": "etch",
-  "version": "0.0.1",
+  "name": "etch-core",
+  "version": "0.0.2",
   "description": "Luna SDK",
   "main": "index.js",
   "devDependencies": {
