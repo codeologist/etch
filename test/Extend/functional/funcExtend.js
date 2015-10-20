@@ -31,6 +31,7 @@
             var window = Etch.Load("test/Extend/functional/a.cmp");
 
             assert( window.extfunc );
+            assert( !window.nofunc );
             done();
         });
 
