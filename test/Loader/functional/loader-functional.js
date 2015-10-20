@@ -22,7 +22,7 @@
             try {
                 Loader("./abc123");
             } catch( e ) {
-                assert.equal( e, "Error: ENOENT: no such file or directory, open '/Users/tony/CODEOLOGY/WIP/etch/abc123'" );
+                assert.equal(e.code, "ENOENT" );
             }
 
             done();

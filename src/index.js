@@ -18,6 +18,11 @@
     "use strict";
 
     var Compile = require("./lib/Compile");
+    var Extend = require("./lib/Extend");
+    var Load = require("./lib/Loader");
+
     module.exports = {
-        Compile:Compile
+        Compile:Compile,
+        Extend:Extend,
+        Load:Load
     };
