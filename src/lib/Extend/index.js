@@ -3,14 +3,22 @@
     "use strict";
 
     var window = require("../Window");
+    var document = require("../Document");
 
     function Extend( Extension ){
 
         var ext = new Extension();
 
-        Object.keys( ext ).forEach(function(key){
-            window.prototype[key] = ext[key];
-        });
+        if ( ext.window ) {
+            Object.keys(ext.window).forEach(function (key) {
+                window.prototype[key] = ext.window[key];
+            });
+        }
+        if ( ext.document ) {
+            Object.keys( ext.document ).forEach(function(key){
+                document.prototype[key] = ext.document[key];
+            });
+        }
     }
 
     module.exports = Extend;

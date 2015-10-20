@@ -15,12 +15,14 @@
     describe('Extend', function(){
 
 
-        it('should create a extend the window prototype with the exposed methods of the extension', function(done){
+        it('should extend the window prototype with the exposed methods of the extension', function(done){
 
             function extension( window ){
 
-                this.extfunc = function(){
+                this.window = {
+                    extfunc : function(){
 
+                    }
                 }
             }
 
@@ -35,6 +37,27 @@
             done();
         });
 
+        it('should  extend the document prototype with the exposed methods of the extension', function(done){
+
+            function extension( window, document ){
+
+                this.document = {
+                    extfunc : function(){
+
+                    }
+                }
+            }
+
+
+            Etch.Extend( extension );
+
+            Compile( "test/Extend/functional/index.html" );
+            var window = Etch.Load("test/Extend/functional/a.cmp");
+
+            assert( window.document.extfunc );
+            assert( !window.document.nofunc );
+            done();
+        });
 
 
 
