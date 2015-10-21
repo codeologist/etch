@@ -2,8 +2,8 @@
     "use strict";
 
 
-    function DocumentReady( callback ){
+    function WindowReady( callback ){
         this.queueReadyCallbackAwaitingPromiseResolution( callback );
     }
 
-    module.exports = DocumentReady;
+    module.exports = WindowReady;

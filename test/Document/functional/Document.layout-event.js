@@ -9,10 +9,10 @@
 
             var window = Loader( "test/Document/functional/document.cmp");
             var ct = 0;
+            var document = window.document;
 
 
-
-            window.ready( function(){
+            document.ready( function(){
 
                 window.document.addEventListener( "onlayout", function( e ){
                     ct++;
@@ -52,8 +52,9 @@
 
             var window = Loader( "test/Document/functional/document.cmp");
             var ct = 0;
+            var document = window.document;
 
-            window.ready( function(){
+            document.ready( function(){
 
                 window.document.addEventListener( "onlayout", function( e ){
                     assert( false );

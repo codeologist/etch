@@ -4,6 +4,7 @@
 
 
 var ObjectNode = require("./ObjectNode"),
+    ready = require("./funcReady"),
     CreateElement = require("./funcCreateElement"),
     CreateEvent= require("./funcCreateEvent"),
     CreateTextNode = require("./funcCreateTextNode"),
@@ -40,7 +41,7 @@ var ObjectNode = require("./ObjectNode"),
     ObjectDocument.prototype.createCommentNode = CreateCommentNode;
     ObjectDocument.prototype.createEvent=  CreateEvent;
     ObjectDocument.prototype.processEventQueue=  ProcessEventQueue;
-
+    ObjectDocument.prototype.ready=  ready;
 
 
 
