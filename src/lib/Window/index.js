@@ -114,16 +114,22 @@
                 this[ANIMATIONSTRATEGY].set( this, renderStrategy);
             }
         });
-
-
+        this.s=Math.floor( Math.random()*1000000 ) * Math.floor( Math.random()*1000000 );
         this.document = document;
 
         this.width = geometry.width;
         this.height = geometry.height;
 
+        this.queueReadyCallbackAwaitingPromiseResolution( function(){
+            Object.keys( this.ext ).forEach( function( key ){
+                if ( typeof this.ext[key].init === "function"){
+                    this.ext[key].init( this, this.document );
+                }
+            }, this);
+        }.bind(this));
     }
 
     Window.prototype.ready=  ready;
     Window.prototype.jsonToDocument = funcJsonToDocument;
-
+    Window.prototype.ext ={};
     module.exports = Window;

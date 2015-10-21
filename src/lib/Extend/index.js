@@ -9,6 +9,12 @@
 
         var ext = new Extension();
 
+        if ( !ext.name ){
+            throw "Extensions must be named";
+        }
+
+        window.prototype.ext[ext.name] = ext;
+
         if ( ext.window ) {
             Object.keys(ext.window).forEach(function (key) {
                 window.prototype[key] = ext.window[key];
