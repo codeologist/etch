@@ -7,7 +7,7 @@
 
     function Extend( Extension ){
 
-        var ext = new Extension();
+        var ext = new Extension( window, document );
 
         if ( !ext.name ){
             throw "Extensions must be named";
