@@ -4,8 +4,6 @@
     var ObjectSchema = require("../Schema");
 
     var AppendChild = require("./funcAppendChild");
-    var GetElementsByTagName = require("./funcGetElementsByTagName");
-    var GetElementById = require("./funcGetElementById");
     var EtchAncestors = require("../utils/EtchAncestors");
     var AddEventListener = require("./funcAddEventListener");
     var RemoveEventListener = require("./funcRemoveEventListener");
@@ -30,12 +28,6 @@
     ObjectNode.prototype = Object.create( new ObjectSchema(),{
         appendChild: {
             value: AppendChild
-        },
-        getElementsByTagName: {
-            value: GetElementsByTagName
-        },
-        getElementById: {
-            value: GetElementById
         },
         addEventListener: {
             value: AddEventListener

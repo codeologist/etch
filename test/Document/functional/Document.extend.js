@@ -2,9 +2,12 @@
     "use strict";
 
     var assert = require('assert');
-    var Document = require("../../../src/lib/Document");
+    var Document = require("../../../src/lib/Document/index");
 
 
+    var ETCH = require("../../../src");
+
+    ETCH.Extend( require("etch-extend-selector") );
 
     describe('Document.getElementById', function(){
 
