@@ -3,6 +3,9 @@
   "version": "0.0.2",
   "description": "Luna SDK",
   "main": "index.js",
+  "dependencies":{
+    "etch-extend-selector":"*"
+  },
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-mocha": "^0.4.12",
